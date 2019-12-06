@@ -39,11 +39,11 @@ def hparam_lists(method):
         hparams_3 = [0.002, 0.001, 0.0005]
     if method == methods[3]:
         # C
-        hparams_1 = [1.0, 0.5, 0.1]
+        hparams_1 = [1.0, 0.5]
         # kernel
-        hparams_2 = ['rbf', 'linear', 'poly']
+        hparams_2 = ['rbf', 'poly', 'linear']
         # decision_function_shape
-        hparams_3 = ['ovo', 'ovr']
+        hparams_3 = ['ovr']
     if method == methods[4]:
         # max_depth
         hparams_1 = [50, 200, None]
@@ -68,7 +68,7 @@ def load_model_with_hparams(method, hparam_1, hparam_2, hparam_3):
     if method == methods[2]:
         model = MLPClassifier(hidden_layer_sizes=hparam_1, alpha=hparam_2, learning_rate_init=hparam_3)
     if method == methods[3]:
-        model = SVC(C=hparam_1, kernel=hparam_2, decision_function_shape=hparam_3)
+        model = SVC(C=hparam_1, kernel=hparam_2, decision_function_shape=hparam_3, max_iter=1000, gamma='auto')
     if method == methods[4]:
         model = DecisionTreeClassifier(max_depth=hparam_1, max_features=hparam_2, min_samples_split=hparam_3)
     if method == methods[5]:
