@@ -16,7 +16,7 @@ import os
 if not os.path.exists('./ckpt'):
     os.makedirs(os.path.join('./ckpt'))
 
-train = True
+train = False
 methods = ['Linear discriminant analysis', 'Quadratic discriminant analysis', 'Neural networks', 'Support vector machines', 'Decision tree', 'Random forest']
 
 def hparam_lists(method):
@@ -108,33 +108,29 @@ def model_load_and_test(method, x_test, y_test):
     print('==== Loaded model : %s, test accuracy : %.03f' % (method, accuracy))
     print('==== Confusion matrix (test) : \n %s' % (cf_matrix))
 
-# Data Load
-x_train, y_train = data_load(split='train')
-x_train = np.reshape(x_train, (x_train.shape[0], -1))
-print("train data : ", x_train.shape)
-print("train label : ", y_train.shape)
+if __name__ == "__main__":
+    # Data Load
+    x_train, y_train = data_load(split='train')
+    x_train = np.reshape(x_train, (x_train.shape[0], -1))
+    print("train data : ", x_train.shape)
+    print("train label : ", y_train.shape)
 
-x_valid, y_valid = data_load(split='valid')
-x_valid = np.reshape(x_valid, (x_valid.shape[0], -1))
-print("valid label : ", x_valid.shape)
-print("valid label : ", y_valid.shape)
+    x_valid, y_valid = data_load(split='valid')
+    x_valid = np.reshape(x_valid, (x_valid.shape[0], -1))
+    print("valid label : ", x_valid.shape)
+    print("valid label : ", y_valid.shape)
 
-x_test, y_test = data_load(split='test')
-x_test = np.reshape(x_test, (x_test.shape[0], -1))
-print("test data : ", x_test.shape)
-print("test label : ", y_test.shape)
+    x_test, y_test = data_load(split='test')
+    x_test = np.reshape(x_test, (x_test.shape[0], -1))
+    print("test data : ", x_test.shape)
+    print("test label : ", y_test.shape)
 
-# small data for debugging
-# x_train, y_train = x_train[:2000], y_train[:2000]
-# x_valid, y_valid = x_valid[:500], y_valid[:500]
-# x_test, y_test = x_test[:500], y_test[:500]
-
-# Experiments
-if train:
-    for method in methods:
-        hparams_1, hparams_2, hparams_3 = hparam_lists(method)
-        best_model_search_and_save(method, x_train, x_valid, x_test, y_train, y_valid, y_test, hparams_1, hparams_2, hparams_3)
-else:
-    for method in methods:
-        model_load_and_test(method, x_test, y_test)
-
+    # Experiments
+    if train:
+        for method in methods:
+            hparams_1, hparams_2, hparams_3 = hparam_lists(method)
+            best_model_search_and_save(method, x_train, x_valid, x_test, y_train, y_valid, y_test, hparams_1, hparams_2, hparams_3)
+    else:
+        for method in methods:
+            model_load_and_test(method, x_test, y_test)
+            
