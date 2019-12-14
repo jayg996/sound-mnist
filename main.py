@@ -16,7 +16,8 @@ import os
 if not os.path.exists('./ckpt'):
     os.makedirs(os.path.join('./ckpt'))
 
-train = False
+train = True
+z_normalization = True
 methods = ['Linear discriminant analysis', 'Quadratic discriminant analysis', 'Neural networks', 'Support vector machines', 'Decision tree', 'Random forest']
 
 def hparam_lists(method):
@@ -57,7 +58,7 @@ def hparam_lists(method):
         # max_depth
         hparams_2 = [50, 200, None]
         # max_feature
-        hparams_3 = ['sqrt', 'log2', None]
+        hparams_3 = ['sqrt', 'log2']
     return hparams_1, hparams_2, hparams_3
 
 def load_model_with_hparams(method, hparam_1, hparam_2, hparam_3):
@@ -99,12 +100,15 @@ def best_model_search_and_save(method, x_train, x_valid, x_test, y_train, y_vali
     fname = os.path.join('ckpt',"best_%s.pkl" % method)
     pickle.dump(best_model, open(fname, 'wb'))
 
-def model_load_and_test(method, x_test, y_test):
+def model_load_and_test(method, x_train, y_train, x_test, y_test):
     fname = os.path.join('ckpt',"best_%s.pkl" % method)
     loaded_model = pickle.load(open(fname, 'rb'))
+    train_y_pred = loaded_model.predict(x_train)
+    train_accuracy = accuracy_score(y_train, train_y_pred)
     y_pred = loaded_model.predict(x_test)
     accuracy = accuracy_score(y_test, y_pred)
     cf_matrix = confusion_matrix(y_test, y_pred)
+    print('==== Loaded model : %s, train accuracy : %.03f' % (method, train_accuracy))
     print('==== Loaded model : %s, test accuracy : %.03f' % (method, accuracy))
     print('==== Confusion matrix (test) : \n %s' % (cf_matrix))
 
@@ -125,6 +129,13 @@ if __name__ == "__main__":
     print("test data : ", x_test.shape)
     print("test label : ", y_test.shape)
 
+    if z_normalization:
+        mean = np.mean(x_train)
+        std = np.std(x_train)
+        x_train = (x_train - mean) / std
+        x_valid = (x_valid - mean) / std
+        x_test = (x_test - mean) / std
+
     # Experiments
     if train:
         for method in methods:
@@ -133,4 +144,3 @@ if __name__ == "__main__":
     else:
         for method in methods:
             model_load_and_test(method, x_test, y_test)
-            

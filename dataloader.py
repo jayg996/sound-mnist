@@ -54,6 +54,7 @@ def audio_file_load(filepath, window_length=16000, fs=16000):
 # mel_spectrogram
 def mel_spectrogram(audio_samples, sr=16000):
     feature = librosa.feature.melspectrogram(audio_samples, sr, n_fft=2048, hop_length=1024, n_mels=80)
+    feature = librosa.power_to_db(feature)
     return feature
 
 def data_load(audio_dir='./sc09', data_dir='./data', split='train', window_length=16000, fs=16000):
