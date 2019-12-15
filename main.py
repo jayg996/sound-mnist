@@ -100,15 +100,16 @@ def best_model_search_and_save(method, x_train, x_valid, x_test, y_train, y_vali
     fname = os.path.join('ckpt',"best_%s.pkl" % method)
     pickle.dump(best_model, open(fname, 'wb'))
 
-def model_load_and_test(method, x_train, y_train, x_test, y_test):
+def model_load_and_test(method, x_train, y_train, x_test, y_test, train_performance=True):
     fname = os.path.join('ckpt',"best_%s.pkl" % method)
     loaded_model = pickle.load(open(fname, 'rb'))
-    train_y_pred = loaded_model.predict(x_train)
-    train_accuracy = accuracy_score(y_train, train_y_pred)
     y_pred = loaded_model.predict(x_test)
     accuracy = accuracy_score(y_test, y_pred)
     cf_matrix = confusion_matrix(y_test, y_pred)
-    print('==== Loaded model : %s, train accuracy : %.03f' % (method, train_accuracy))
+    if train_performance:
+        train_y_pred = loaded_model.predict(x_train)
+        train_accuracy = accuracy_score(y_train, train_y_pred)
+        print('==== Loaded model : %s, train accuracy : %.03f' % (method, train_accuracy))
     print('==== Loaded model : %s, test accuracy : %.03f' % (method, accuracy))
     print('==== Confusion matrix (test) : \n %s' % (cf_matrix))
 

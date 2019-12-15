@@ -32,4 +32,4 @@ if z_normalization:
     x_real = (x_real - mean) / std
 
 for method in methods:
-    model_load_and_test(method, x_train, y_train, x_real, y_real)
+    model_load_and_test(method, None, None, x_real, y_real, False)
