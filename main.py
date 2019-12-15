@@ -16,7 +16,7 @@ import os
 if not os.path.exists('./ckpt'):
     os.makedirs(os.path.join('./ckpt'))
 
-train = True
+train = False
 z_normalization = True
 methods = ['Linear discriminant analysis', 'Quadratic discriminant analysis', 'Neural networks', 'Support vector machines', 'Decision tree', 'Random forest']
 
@@ -143,4 +143,4 @@ if __name__ == "__main__":
             best_model_search_and_save(method, x_train, x_valid, x_test, y_train, y_valid, y_test, hparams_1, hparams_2, hparams_3)
     else:
         for method in methods:
-            model_load_and_test(method, x_test, y_test)
+            model_load_and_test(method, x_train, y_train, x_test, y_test)
