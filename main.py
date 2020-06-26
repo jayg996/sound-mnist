@@ -16,7 +16,7 @@ import os
 if not os.path.exists('./ckpt'):
     os.makedirs(os.path.join('./ckpt'))
 
-train = False
+train = True
 z_normalization = True
 methods = ['Linear discriminant analysis', 'Quadratic discriminant analysis', 'Neural networks', 'Support vector machines', 'Decision tree', 'Random forest']
 
